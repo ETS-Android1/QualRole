@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.guicelebrini.qualrole.R;
+import com.android.guicelebrini.qualrole.helper.Base64Custom;
+import com.android.guicelebrini.qualrole.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,12 +31,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private SignInButton googleButton;
 
-    FirebaseFirestore db;
+    private FirebaseFirestore db;
 
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
-    private FirebaseUser user;
+    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         findViewsById();
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         createRequest();
 
@@ -100,8 +103,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.i("Resultado", "signInWithCredential in Firebase:success");
-                            user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            firebaseUser = mAuth.getCurrentUser();
+                            createUserInFirebaseFirestore(firebaseUser);
+                            updateUI(firebaseUser);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.i("Resultado", "signInWithCredential in Firebase:failure", task.getException());
@@ -111,8 +115,18 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
-        if(user != null){
+    private void createUserInFirebaseFirestore(FirebaseUser firebaseUser){
+        String userName = firebaseUser.getDisplayName();
+        String userEmail = firebaseUser.getEmail();
+        String encodedEmail = Base64Custom.encode(userEmail);
+
+        User user = new User(userName, userEmail);
+        db.collection("users").document(encodedEmail).set(user);
+
+    }
+
+    private void updateUI(FirebaseUser firebaseUser) {
+        if(firebaseUser != null){
             Toast.makeText(this,"Usuário logado no app com sucesso",Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, MainActivity.class));
             finish();
@@ -122,6 +136,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        updateUI(user);
+        updateUI(firebaseUser);
     }
 }

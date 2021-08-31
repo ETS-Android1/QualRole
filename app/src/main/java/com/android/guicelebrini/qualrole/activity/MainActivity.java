@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.guicelebrini.qualrole.R;
 import com.android.guicelebrini.qualrole.activity.LoginActivity;
@@ -18,6 +19,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TextView tvName, tvEmail;
+
     private FirebaseAuth auth;
     private FirebaseUser user;
     private Button buttonLogout;
@@ -26,15 +29,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        findViewsById();
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
         //GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-        Log.i("Resultado Login", user.getDisplayName() + " | " + user.getEmail());
-
-        buttonLogout = findViewById(R.id.button_logout);
+        tvName.setText(user.getDisplayName());
+        tvEmail.setText(user.getEmail());
 
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void findViewsById(){
+        tvName = findViewById(R.id.tv_name);
+        tvEmail = findViewById(R.id.tv_email);
+        buttonLogout = findViewById(R.id.button_logout);
     }
 
     private void googleLogout(){
