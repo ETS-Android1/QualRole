@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -34,14 +35,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         findViewsById();
         configureToolbar();
-
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-
-
-
-
-
 
 
     }
@@ -56,12 +51,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_toolbar_main ,menu);
+
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()){
+            case R.id.action_logout:
+                auth.signOut();
+                googleLogout();
+                goToLoginActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void googleLogout(){
@@ -72,5 +78,10 @@ public class MainActivity extends AppCompatActivity {
 
         GoogleSignInClient googleSignInClient=GoogleSignIn.getClient(this,gso);
         googleSignInClient.signOut();
+    }
+
+    private void goToLoginActivity(){
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        finish();
     }
 }
