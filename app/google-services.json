@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "366252628667",
+    "project_id": "qual-role-3ceb7",
+    "storage_bucket": "qual-role-3ceb7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366252628667:android:237693ce646a9cf470a79e",
+        "android_client_info": {
+          "package_name": "com.android.guicelebrini.qualrole"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366252628667-ebu871s1o3pgtd0hscpiuiei626n8rn4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.guicelebrini.qualrole",
+            "certificate_hash": "ce53e110e1d0d3751ceabbca6c052728884d5b18"
+          }
+        },
+        {
+          "client_id": "366252628667-sj6n3bbosqnah7cfeh006rmqs5tcma2i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpWMGS62w-tQYR69zFAsAyXJ9hEGV_mFc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366252628667-sj6n3bbosqnah7cfeh006rmqs5tcma2i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
