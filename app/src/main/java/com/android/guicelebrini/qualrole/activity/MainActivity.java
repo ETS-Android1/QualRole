@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
+            case R.id.action_infos:
+                goToInfosActivity();
+                return true;
             case R.id.action_logout:
                 auth.signOut();
                 googleLogout();
@@ -78,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
 
         GoogleSignInClient googleSignInClient=GoogleSignIn.getClient(this,gso);
         googleSignInClient.signOut();
+    }
+
+    private void goToInfosActivity(){
+        startActivity(new Intent(getApplicationContext(), InfosActivity.class));
     }
 
     private void goToLoginActivity(){
