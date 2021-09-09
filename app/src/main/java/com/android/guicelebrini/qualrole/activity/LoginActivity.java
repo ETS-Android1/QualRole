@@ -123,7 +123,6 @@ public class LoginActivity extends AppCompatActivity {
 
         User user = new User(userName, userEmail);
         db.collection("users").document(encodedEmail).set(user);
-
     }
 
     private void updateUI(FirebaseUser firebaseUser) {

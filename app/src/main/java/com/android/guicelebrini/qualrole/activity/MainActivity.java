@@ -13,18 +13,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.guicelebrini.qualrole.R;
 import com.android.guicelebrini.qualrole.activity.LoginActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    private FloatingActionButton fab;
 
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -38,11 +41,19 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Fab clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
 
     private void findViewsById(){
         toolbar = findViewById(R.id.toolbar_main);
+        fab = findViewById(R.id.fab_add_question);
     }
 
     private void configureToolbar(){
