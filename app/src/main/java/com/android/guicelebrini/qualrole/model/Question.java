@@ -6,9 +6,16 @@ public class Question {
     private String description;
     private String user;
     private String city;
-    private String moneyAvailable;
+    private double moneyAvailable;
 
     public Question(){
+    }
+
+    public Question(String title, String user, String city, double moneyAvailable) {
+        this.title = title;
+        this.user = user;
+        this.city = city;
+        this.moneyAvailable = moneyAvailable;
     }
 
     public String getTitle() {
@@ -43,11 +50,11 @@ public class Question {
         this.city = city;
     }
 
-    public String getMoneyAvailable() {
+    public double getMoneyAvailable() {
         return moneyAvailable;
     }
 
-    public void setMoneyAvailable(String moneyAvailable) {
+    public void setMoneyAvailable(double moneyAvailable) {
         this.moneyAvailable = moneyAvailable;
     }
 }
