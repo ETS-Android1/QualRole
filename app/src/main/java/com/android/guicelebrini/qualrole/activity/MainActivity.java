@@ -58,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
         configureRecyclerQuestions();
 
+        fab.setOnClickListener(view -> {
+            startActivity(new Intent(getApplicationContext(), AddQuestionActivity.class));
+        });
 
     }
 
