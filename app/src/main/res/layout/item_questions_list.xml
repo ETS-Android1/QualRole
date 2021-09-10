@@ -41,6 +41,7 @@
         android:id="@+id/tv_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:drawableLeft="@drawable/ic_baseline_location_city_24"
         android:drawablePadding="3dp"

@@ -55,7 +55,16 @@ public class AdapterRecyclerQuestions extends RecyclerView.Adapter<AdapterRecycl
             this.textTitle.setText(question.getTitle());
             this.textUser.setText(question.getUser());
             this.textCity.setText(question.getCity());
-            this.textMoney.setText(String.valueOf(question.getMoneyAvailable()));
+
+            double moneyAvailable = question.getMoneyAvailable();
+
+            if (moneyAvailable > 0) {
+                this.textMoney.setText(String.valueOf(moneyAvailable));
+            } else {
+                this.textMoney.setText("----");
+                this.textMoney.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_money_off_24, 0, 0, 0);
+            }
+
         }
     }
 }

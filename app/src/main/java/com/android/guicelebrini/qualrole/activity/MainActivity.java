@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createQuestionsList(){
         questionsList.add(new Question("Title", "User", "City", 25.60));
-        questionsList.add(new Question("Title2", "User2", "City2", 15.50));
+        questionsList.add(new Question("Title2", "User2", "City2", 0));
     }
 
     private void configureRecyclerQuestions(){
