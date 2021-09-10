@@ -24,11 +24,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:text="author"
         android:textColor="@color/purple_500"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
@@ -37,46 +35,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <TextView
         android:id="@+id/tv_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:drawableLeft="@drawable/ic_baseline_location_city_24"
+        android:drawablePadding="3dp"
         android:text="city"
-        android:textColor="@color/purple_500"
+        android:textColor="@color/dark_purple_pallete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toTopOf="@+id/tv_user" />
-
-    <TextView
-        android:id="@+id/tv_RS"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:gravity="center"
-        android:text="R$"
-        android:textColor="@color/green"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_user" />
 
     <TextView
         android:id="@+id/tv_money"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_baseline_attach_money_24"
         android:gravity="center"
         android:text="0,00"
-        android:textColor="@color/green"
+        android:textColor="@color/dark_purple_pallete"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_RS"
-        app:layout_constraintStart_toStartOf="@+id/tv_RS"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline8"
         app:layout_constraintTop_toTopOf="@+id/tv_city" />
 </androidx.constraintlayout.widget.ConstraintLayout>
