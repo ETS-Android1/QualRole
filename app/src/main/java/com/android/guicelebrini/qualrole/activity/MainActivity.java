@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.android.guicelebrini.qualrole.R;
 import com.android.guicelebrini.qualrole.activity.LoginActivity;
 import com.android.guicelebrini.qualrole.adapter.AdapterRecyclerQuestions;
+import com.android.guicelebrini.qualrole.helper.RecyclerItemClickListener;
 import com.android.guicelebrini.qualrole.model.Question;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -107,6 +109,27 @@ public class MainActivity extends AppCompatActivity {
         recyclerQuestions.setLayoutManager(layoutManager);
         recyclerQuestions.setHasFixedSize(true);
         recyclerQuestions.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayout.VERTICAL));
+
+        recyclerQuestions.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), recyclerQuestions, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Question question = questionsList.get(position);
+
+                Intent intent = new Intent(getApplicationContext(), QuestionActivity.class);
+                intent.putExtra("firestoreId", question.getFirestoreId());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        }));
 
         recyclerQuestions.setAdapter(adapter);
     }
