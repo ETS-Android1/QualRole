@@ -57,28 +57,34 @@ public class AddQuestionActivity extends AppCompatActivity {
         String description = editDesc.getText().toString();
         String city = editCity.getText().toString();
         String insertedMoney = editMoney.getText().toString();
-        double money = Double.parseDouble(insertedMoney);
 
         String encodedEmail = Base64Custom.encode(user.getEmail());
 
         if (title.equals("") || description.equals("") || city.equals("") || insertedMoney.equals("")){
             Toast.makeText(getApplicationContext(), "Por favor, insira valores válidos", Toast.LENGTH_SHORT).show();
         } else {
+            double money = Double.parseDouble(insertedMoney);
             Question question = new Question(title, description, user.getDisplayName(), city, money);
 
             db.collection("questions").add(question)
                     .addOnCompleteListener(task -> {
-                        DocumentReference reference = task.getResult();
-                        String questionId = reference.getId();
-                        db.collection("users").document(encodedEmail).collection("questions").document(questionId).set(question);
+
+                        if (task.isSuccessful()) {
+                            DocumentReference reference = task.getResult();
+                            String questionId = reference.getId();
+                            db.collection("users").document(encodedEmail)
+                                    .collection("questions").document(questionId).set(question)
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            Toast.makeText(getApplicationContext(), "Pergunta salva com sucesso", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Falha ao salvar pergunta", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Falha ao salvar pergunta", Toast.LENGTH_SHORT).show();
+                        }
                     });
-
-
-
-
-
-
-
         }
         
     }

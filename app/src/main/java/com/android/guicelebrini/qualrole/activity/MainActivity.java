@@ -26,9 +26,15 @@ import com.android.guicelebrini.qualrole.model.Question;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseUser user;
+    private FirebaseFirestore db;
 
     private RecyclerView recyclerQuestions;
     private AdapterRecyclerQuestions adapter;
@@ -53,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         configureToolbar();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
 
         createQuestionsList();
 
@@ -75,8 +83,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createQuestionsList(){
-        questionsList.add(new Question("Title", "User", "City", 25.60));
-        questionsList.add(new Question("Title2", "User2", "City2", 0));
+        db.collection("questions").get()
+                .addOnCompleteListener(task -> {
+                    questionsList.clear();
+
+                    for (DocumentSnapshot snapshot : task.getResult()) {
+                        Question question = snapshot.toObject(Question.class);
+                        questionsList.add(question);
+                    }
+
+                    adapter.notifyDataSetChanged();
+
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("questionsList", e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Falha ao recuperar perguntas", Toast.LENGTH_SHORT);
+                });
     }
 
     private void configureRecyclerQuestions(){
