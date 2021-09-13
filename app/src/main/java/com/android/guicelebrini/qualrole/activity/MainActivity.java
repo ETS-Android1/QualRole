@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
                     for (DocumentSnapshot snapshot : task.getResult()) {
                         Question question = snapshot.toObject(Question.class);
+                        question.setFirestoreId(snapshot.getId());
                         questionsList.add(question);
                     }
 

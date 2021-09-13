@@ -1,5 +1,7 @@
 package com.android.guicelebrini.qualrole.model;
 
+import com.google.firebase.firestore.Exclude;
+
 public class Question {
 
     private String title;
@@ -7,15 +9,9 @@ public class Question {
     private String user;
     private String city;
     private double moneyAvailable;
+    private String firestoreId;
 
     public Question(){
-    }
-
-    public Question(String title, String user, String city, double moneyAvailable) {
-        this.title = title;
-        this.user = user;
-        this.city = city;
-        this.moneyAvailable = moneyAvailable;
     }
 
     public Question(String title, String description, String user, String city, double moneyAvailable) {
@@ -64,5 +60,14 @@ public class Question {
 
     public void setMoneyAvailable(double moneyAvailable) {
         this.moneyAvailable = moneyAvailable;
+    }
+
+    @Exclude
+    public String getFirestoreId() {
+        return firestoreId;
+    }
+
+    public void setFirestoreId(String firestoreId) {
+        this.firestoreId = firestoreId;
     }
 }
