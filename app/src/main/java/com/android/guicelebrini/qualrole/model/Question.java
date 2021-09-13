@@ -18,6 +18,14 @@ public class Question {
         this.moneyAvailable = moneyAvailable;
     }
 
+    public Question(String title, String description, String user, String city, double moneyAvailable) {
+        this.title = title;
+        this.description = description;
+        this.user = user;
+        this.city = city;
+        this.moneyAvailable = moneyAvailable;
+    }
+
     public String getTitle() {
         return title;
     }
