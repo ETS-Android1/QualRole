@@ -22,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AddQuestionActivity extends AppCompatActivity {
 
-    private Button buttonAdd;
+    private Button buttonAdd, buttonNoMoney;
     private EditText editTitle, editDesc, editCity, editMoney;
 
     private FirebaseAuth auth;
@@ -42,10 +42,15 @@ public class AddQuestionActivity extends AppCompatActivity {
             addQuestionInFirebase();
         });
 
+        buttonNoMoney.setOnClickListener(view -> {
+            editMoney.setText("00.00");
+        });
+
     }
 
     private void findViewsById(){
         buttonAdd = findViewById(R.id.button_add_question);
+        buttonNoMoney = findViewById(R.id.button_question_no_money);
         editTitle = findViewById(R.id.edit_question_title);
         editDesc = findViewById(R.id.edit_question_desc);
         editCity = findViewById(R.id.edit_question_city);
