@@ -77,6 +77,7 @@ public class AddQuestionActivity extends AppCompatActivity {
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
                                             Toast.makeText(getApplicationContext(), "Pergunta salva com sucesso", Toast.LENGTH_SHORT).show();
+                                            finish();
                                         } else {
                                             Toast.makeText(getApplicationContext(), "Falha ao salvar pergunta", Toast.LENGTH_SHORT).show();
                                         }

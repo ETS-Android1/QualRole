@@ -62,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
         user = auth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
-        createQuestionsList();
-
         configureRecyclerQuestions();
 
         fab.setOnClickListener(view -> {
@@ -153,5 +151,11 @@ public class MainActivity extends AppCompatActivity {
     private void goToLoginActivity(){
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        createQuestionsList();
     }
 }
