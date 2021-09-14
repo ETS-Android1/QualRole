@@ -15,4 +15,7 @@
     <string name="question_money_hint">Quanto dinheiro você tem?</string>
     <string name="question_money_button_hint">Não tenho dinheiro</string>
     <string name="button_add_question">Adicionar</string>
+
+    <string name="textView_no_answers">Ninguém respondeu ainda... Seja o primeiro!</string>
+
 </resources>
