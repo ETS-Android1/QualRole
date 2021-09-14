@@ -2,17 +2,26 @@ package com.android.guicelebrini.qualrole.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.guicelebrini.qualrole.R;
+import com.android.guicelebrini.qualrole.adapter.AdapterRecyclerAnswers;
+import com.android.guicelebrini.qualrole.model.Answer;
 import com.android.guicelebrini.qualrole.model.Question;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class QuestionActivity extends AppCompatActivity {
 
@@ -21,6 +30,10 @@ public class QuestionActivity extends AppCompatActivity {
     private String firestoreQuestionId;
 
     private FirebaseFirestore db;
+
+    private RecyclerView recyclerAnswers;
+    private AdapterRecyclerAnswers adapter;
+    private List<Answer> answersList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +45,10 @@ public class QuestionActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         getQuestionInFirebase();
+
+        createAnswersList();
+
+        configureRecyclerView();
     }
 
     private void findViewsById(){
@@ -40,6 +57,8 @@ public class QuestionActivity extends AppCompatActivity {
         textDesc = findViewById(R.id.tv_question_desc);
         textCity = findViewById(R.id.tv_question_city);
         textMoney = findViewById(R.id.tv_question_money);
+
+        recyclerAnswers = findViewById(R.id.recycler_answers);
     }
 
     private void getExtras(){
@@ -70,5 +89,21 @@ public class QuestionActivity extends AppCompatActivity {
             this.textMoney.setText("----");
             this.textMoney.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_money_off_24, 0, 0, 0);
         }
+    }
+
+    private void createAnswersList(){
+        answersList.add(new Answer("Answer 1", "User 1"));
+        answersList.add(new Answer("Answer 2", "User 2"));
+    }
+
+    private void configureRecyclerView(){
+        adapter = new AdapterRecyclerAnswers(answersList);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+
+        recyclerAnswers.setLayoutManager(layoutManager);
+        recyclerAnswers.setHasFixedSize(true);
+        recyclerAnswers.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayout.VERTICAL));
+
+        recyclerAnswers.setAdapter(adapter);
     }
 }

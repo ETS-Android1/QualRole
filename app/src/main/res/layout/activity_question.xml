@@ -15,7 +15,7 @@
         android:layout_marginTop="16dp"
         android:text="TextView"
         android:textColor="@color/dark_purple_pallete"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
         android:layout_marginTop="8dp"
         android:text="TextView"
         android:textColor="@color/purple_500"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/tv_question_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_question_title" />
 
@@ -58,6 +58,7 @@
         android:layout_marginRight="8dp"
         android:justificationMode="inter_word"
         android:text="TextView"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
@@ -150,6 +151,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_answers"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
