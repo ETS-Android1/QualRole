@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createQuestionsList(){
+
         db.collection("questions").get()
                 .addOnCompleteListener(task -> {
                     questionsList.clear();
