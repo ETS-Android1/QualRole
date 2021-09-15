@@ -94,7 +94,9 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     public void goToAddAnswerActivity(View view){
-        startActivity(new Intent(getApplicationContext(), AddAnswerActivity.class));
+        Intent intent = new Intent(getApplicationContext(), AddAnswerActivity.class);
+        intent.putExtra("firestoreId", firestoreQuestionId);
+        startActivity(intent);
     }
 
     private void createAnswersList(){
