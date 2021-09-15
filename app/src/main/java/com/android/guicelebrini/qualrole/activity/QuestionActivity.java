@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -89,6 +91,10 @@ public class QuestionActivity extends AppCompatActivity {
             this.textMoney.setText("----");
             this.textMoney.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_money_off_24, 0, 0, 0);
         }
+    }
+
+    public void goToAddAnswerActivity(View view){
+        startActivity(new Intent(getApplicationContext(), AddAnswerActivity.class));
     }
 
     private void createAnswersList(){

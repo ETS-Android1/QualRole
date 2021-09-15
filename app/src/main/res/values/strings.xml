@@ -9,6 +9,7 @@
 
     <string name="toolbar_title">Qual Rolê?</string>
 
+    <!-- Add question activity -->
     <string name="question_title_hint">Em qual rolê você está pensando?</string>
     <string name="question_desc_hint">Descreva melhor sua ideia</string>
     <string name="question_city_hint">Qual é a sua cidade?</string>
@@ -16,6 +17,11 @@
     <string name="question_money_button_hint">Não tenho dinheiro</string>
     <string name="button_add_question">Adicionar</string>
 
+    <!-- Question activity -->
     <string name="textView_no_answers">Ninguém respondeu ainda... Seja o primeiro!</string>
+
+    <!-- Add answer activity -->
+    <string name="button_add_answer">Responder</string>
+    <string name="textView_share_answer">Compartilhe sua ideia!</string>
 
 </resources>

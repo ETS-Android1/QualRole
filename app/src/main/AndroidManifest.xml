@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QualRole">
-        <activity android:name=".activity.QuestionActivity"></activity>
+        <activity android:name=".activity.AddAnswerActivity"></activity>
+        <activity android:name=".activity.QuestionActivity" />
         <activity android:name=".activity.AddQuestionActivity" />
         <activity android:name=".activity.InfosActivity" />
         <activity android:name=".activity.MainActivity" />

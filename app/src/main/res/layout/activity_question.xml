@@ -110,7 +110,7 @@
 
     <TextView
         android:id="@+id/tv_question_city"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -144,6 +144,7 @@
         android:drawableLeft="@drawable/ic_baseline_add_comment_24"
         android:drawablePadding="3dp"
         android:gravity="center"
+        android:onClick="goToAddAnswerActivity"
         android:text="Comentar"
         android:textColor="@color/dark_purple_pallete"
         app:layout_constraintEnd_toStartOf="@+id/guideline13"
