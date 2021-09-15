@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,8 +101,19 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void createAnswersList(){
-        answersList.add(new Answer("Answer 1", "User 1"));
-        answersList.add(new Answer("Answer 2", "User 2"));
+        db.collection("questions").document(firestoreQuestionId).collection("answers").get()
+                .addOnCompleteListener(task -> {
+
+                    answersList.clear();
+
+                    for ( DocumentSnapshot snapshot : task.getResult()) {
+                        Answer answer = snapshot.toObject(Answer.class);
+                        answersList.add(answer);
+                    }
+
+                    adapter.notifyDataSetChanged();
+
+                });
     }
 
     private void configureRecyclerView(){
