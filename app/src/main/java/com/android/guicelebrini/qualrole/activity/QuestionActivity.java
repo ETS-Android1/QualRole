@@ -1,15 +1,20 @@
 package com.android.guicelebrini.qualrole.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,7 +33,7 @@ import java.util.List;
 
 public class QuestionActivity extends AppCompatActivity {
 
-    private TextView textTitle, textUser, textDesc, textCity, textMoney;
+    private TextView textTitle, textUser, textDesc, textCity, textMoney, textNoAnswers;
 
     private String firestoreQuestionId;
 
@@ -49,7 +54,7 @@ public class QuestionActivity extends AppCompatActivity {
 
         getQuestionInFirebase();
 
-        createAnswersList();
+        verifyList();
 
         configureRecyclerView();
     }
@@ -60,6 +65,7 @@ public class QuestionActivity extends AppCompatActivity {
         textDesc = findViewById(R.id.tv_question_desc);
         textCity = findViewById(R.id.tv_question_city);
         textMoney = findViewById(R.id.tv_question_money);
+        textNoAnswers = findViewById(R.id.tv_question_no_answers);
 
         recyclerAnswers = findViewById(R.id.recycler_answers);
     }
@@ -110,10 +116,21 @@ public class QuestionActivity extends AppCompatActivity {
                         Answer answer = snapshot.toObject(Answer.class);
                         answersList.add(answer);
                     }
+                    verifyList();
 
                     adapter.notifyDataSetChanged();
 
                 });
+    }
+
+
+    private void verifyList(){
+
+        if (!answersList.isEmpty()) {
+            textNoAnswers.setVisibility(View.GONE);
+        } else {
+            textNoAnswers.setVisibility(View.VISIBLE);
+        }
     }
 
     private void configureRecyclerView(){
@@ -125,5 +142,11 @@ public class QuestionActivity extends AppCompatActivity {
         recyclerAnswers.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayout.VERTICAL));
 
         recyclerAnswers.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        createAnswersList();
     }
 }
