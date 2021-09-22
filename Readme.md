@@ -1,4 +1,5 @@
-# App Qual Rolê ## (PT-BR/EN)
+# App Qual Rolê
+### - (PT-BR/EN)
 
 ## Sobre o projeto
 
