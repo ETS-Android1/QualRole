@@ -4,6 +4,7 @@ public class User {
 
     private String name;
     private String email;
+    private String followCode;
 
     public User(){}
 
@@ -26,5 +27,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFollowCode() {
+        return followCode;
+    }
+
+    public void setFollowCode(String followCode) {
+        this.followCode = followCode;
     }
 }
