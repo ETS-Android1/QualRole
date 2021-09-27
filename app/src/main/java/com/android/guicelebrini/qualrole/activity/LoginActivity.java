@@ -19,6 +19,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import android.content.Intent;
@@ -121,8 +123,18 @@ public class LoginActivity extends AppCompatActivity {
         String userEmail = firebaseUser.getEmail();
         String encodedEmail = Base64Custom.encode(userEmail);
 
-        User user = new User(userName, userEmail);
-        db.collection("users").document(encodedEmail).set(user);
+        db.collection("users").document(encodedEmail).get()
+                .addOnCompleteListener(task -> {
+                    DocumentSnapshot reference = task.getResult();
+                    if (reference.exists()){
+                        Log.i("Resultado", "The user already exists");
+                    } else {
+                        User user = new User(userName, userEmail);
+                        db.collection("users").document(encodedEmail).set(user);
+                        Log.i("Resultado" ,"Your user was created");
+                    }
+                });
+
     }
 
     private void updateUI(FirebaseUser firebaseUser) {
