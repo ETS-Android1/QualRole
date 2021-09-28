@@ -160,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         if(set.size() == registeredUsers) {
                             Log.i("Resultado","The number couldn't be saved");
-                            sortedNumber = new Random().nextInt(8999) + 1000;
+                            sortedNumber = new Random().nextInt(9000) + 1000;
                         } else {
                             Log.i("Resultado","Your new number is " + sortedNumber);
                             user.setFollowCode(sortedNumber);

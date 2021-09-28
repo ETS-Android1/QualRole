@@ -10,15 +10,17 @@ import com.android.guicelebrini.qualrole.R;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 public class InfosActivity extends AppCompatActivity {
 
     private ShapeableImageView imageProfile;
-    private TextView textName, textEmail;
+    private TextView textName, textEmail, textFollowCode;
 
     private FirebaseAuth auth;
     private FirebaseUser user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +37,13 @@ public class InfosActivity extends AppCompatActivity {
         imageProfile = findViewById(R.id.iv_profile);
         textName = findViewById(R.id.tv_profile_name);
         textEmail = findViewById(R.id.tv_profile_email);
+        textFollowCode = findViewById(R.id.tv_follow_code);
     }
 
     private void getUserFromFirebase(){
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+
     }
 
     private void setInfos(FirebaseUser user) {
