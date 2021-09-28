@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.guicelebrini.qualrole.R;
 import com.android.guicelebrini.qualrole.helper.Base64Custom;
+import com.android.guicelebrini.qualrole.helper.Preferences;
 import com.android.guicelebrini.qualrole.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -132,6 +133,9 @@ public class LoginActivity extends AppCompatActivity {
                     DocumentSnapshot reference = task.getResult();
                     if (reference.exists()){
                         Log.i("Resultado", "The user already exists");
+                        Preferences preferences = new Preferences(getApplicationContext());
+                        User user = reference.toObject(User.class);
+                        preferences.saveData("#" + user.getFollowCode());
                     } else {
                         User user = new User(userName, userEmail);
                         createFollowCode(user);
@@ -165,6 +169,8 @@ public class LoginActivity extends AppCompatActivity {
                             Log.i("Resultado","Your new number is " + sortedNumber);
                             user.setFollowCode(sortedNumber);
                             saveInFirestore(user);
+                            Preferences preferences = new Preferences(getApplicationContext());
+                            preferences.saveData("#" + sortedNumber);
                         }
                     }
 
