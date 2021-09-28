@@ -22,12 +22,16 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import java.util.HashSet;
+import java.util.Random;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -130,11 +134,55 @@ public class LoginActivity extends AppCompatActivity {
                         Log.i("Resultado", "The user already exists");
                     } else {
                         User user = new User(userName, userEmail);
-                        db.collection("users").document(encodedEmail).set(user);
-                        Log.i("Resultado" ,"Your user was created");
+                        createFollowCode(user);
                     }
                 });
 
+    }
+
+    private void createFollowCode(User user){
+
+        HashSet<Integer> set = new HashSet<>();
+
+        db.collection("users").get()
+                .addOnCompleteListener(task -> {
+                    for (DocumentSnapshot snapshot : task.getResult()) {
+                        User caughtUser = snapshot.toObject(User.class);
+                        set.add(caughtUser.getFollowCode());
+                    }
+
+                    int registeredUsers = set.size();
+                    Log.i("Resultado", String.valueOf(registeredUsers));
+                    int sortedNumber = new Random().nextInt(9000) + 1000;
+
+                    while (set.size() == registeredUsers) {
+                        set.add(sortedNumber);
+
+                        if(set.size() == registeredUsers) {
+                            Log.i("Resultado","The number couldn't be saved");
+                            sortedNumber = new Random().nextInt(8999) + 1000;
+                        } else {
+                            Log.i("Resultado","Your new number is " + sortedNumber);
+                            user.setFollowCode(sortedNumber);
+                            saveInFirestore(user);
+                        }
+                    }
+
+                });
+    }
+
+    private void saveInFirestore(User user){
+
+        String encodedEmail = Base64Custom.encode(user.getEmail());
+
+        db.collection("users").document(encodedEmail).set(user)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        Log.i("Resultado", "User saved in Firestore successfully");
+                    } else {
+                        Log.i("Resultado", "Your user couldn't be saved");
+                    }
+                });
     }
 
     private void updateUI(FirebaseUser firebaseUser) {
