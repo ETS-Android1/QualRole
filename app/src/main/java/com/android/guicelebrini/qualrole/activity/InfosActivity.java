@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.guicelebrini.qualrole.R;
+import com.android.guicelebrini.qualrole.helper.Preferences;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +22,7 @@ public class InfosActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseUser user;
 
+    private String followCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +45,14 @@ public class InfosActivity extends AppCompatActivity {
     private void getUserFromFirebase(){
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-
     }
 
     private void setInfos(FirebaseUser user) {
+        Preferences preferences = new Preferences(getApplicationContext());
+
         Picasso.get().load(user.getPhotoUrl()).into(imageProfile);
         textName.setText(user.getDisplayName());
         textEmail.setText(user.getEmail());
+        textFollowCode.setText(preferences.getFollowCode());
     }
 }

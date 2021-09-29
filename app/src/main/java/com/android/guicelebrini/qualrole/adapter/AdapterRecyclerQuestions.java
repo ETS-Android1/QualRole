@@ -60,6 +60,7 @@ public class AdapterRecyclerQuestions extends RecyclerView.Adapter<AdapterRecycl
 
             if (moneyAvailable > 0) {
                 this.textMoney.setText(String.format("%.2f",moneyAvailable));
+                this.textMoney.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_attach_money_24, 0, 0, 0);
             } else {
                 this.textMoney.setText("----");
                 this.textMoney.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_money_off_24, 0, 0, 0);
