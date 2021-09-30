@@ -22,6 +22,7 @@ In this app any registered user will have access to all the questions and answer
 ### Bibliotecas utilizadas | Used libraries
 - Picasso
 - Material Components for Android
+- SmartTabLayout
 - Firebase Auth
 - Firebase Firestore
 
