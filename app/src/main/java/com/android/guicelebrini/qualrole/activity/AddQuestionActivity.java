@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AddQuestionActivity extends AppCompatActivity {
@@ -62,7 +63,6 @@ public class AddQuestionActivity extends AppCompatActivity {
         String description = editDesc.getText().toString();
         String city = editCity.getText().toString();
         String insertedMoney = editMoney.getText().toString();
-
         String encodedEmail = Base64Custom.encode(user.getEmail());
 
         if (title.equals("") || description.equals("") || city.equals("") || insertedMoney.equals("")){
@@ -81,8 +81,13 @@ public class AddQuestionActivity extends AppCompatActivity {
                                     .collection("questions").document(questionId).set(question)
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
-                                            Toast.makeText(getApplicationContext(), "Pergunta salva com sucesso", Toast.LENGTH_SHORT).show();
-                                            finish();
+                                            db.collection("users").document(encodedEmail).update("questionsNumber", FieldValue.increment(1))
+                                                    .addOnCompleteListener(task2 -> {
+                                                        if (task2.isSuccessful()){
+                                                            Toast.makeText(getApplicationContext(), "Pergunta salva com sucesso", Toast.LENGTH_SHORT).show();
+                                                            finish();
+                                                        }
+                                                    });
                                         } else {
                                             Toast.makeText(getApplicationContext(), "Falha ao salvar pergunta", Toast.LENGTH_SHORT).show();
                                         }
