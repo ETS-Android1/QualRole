@@ -1,6 +1,7 @@
 package com.android.guicelebrini.qualrole.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -106,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
+            case R.id.action_follow:
+                openFollowDialog();
+                return true;
             case R.id.action_infos:
                 goToInfosActivity();
                 return true;
@@ -117,6 +123,34 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void openFollowDialog(){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+
+        dialog.setTitle("Comece a seguir alguém!");
+        dialog.setMessage("Digite o nome do usuário e o código dele");
+        dialog.setCancelable(false);
+
+        EditText editUserName = new EditText(this);
+        editUserName.setHint("Ex: Usuário#9999");
+        editUserName.setPadding(40, 20, 40, 20);
+
+        dialog.setView(editUserName);
+
+        dialog.setPositiveButton("Adicionar", (dialogInterface, i) -> {
+            followUser();
+        });
+
+        dialog.setNegativeButton("Cancelar", (dialogInterface, i) -> {
+
+        });
+
+        dialog.create().show();
+    }
+
+    private void followUser(){
+
     }
 
     private void googleLogout(){
@@ -136,11 +170,5 @@ public class MainActivity extends AppCompatActivity {
     private void goToLoginActivity(){
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //createQuestionsList();
     }
 }
