@@ -5,6 +5,7 @@ public class User {
     private String name;
     private String email;
     private int followCode;
+    private int questionsNumber = 0;
 
     public User(){}
 
@@ -35,5 +36,13 @@ public class User {
 
     public void setFollowCode(int followCode) {
         this.followCode = followCode;
+    }
+
+    public int getQuestionsNumber() {
+        return questionsNumber;
+    }
+
+    public void setQuestionsNumber(int questionsNumber) {
+        this.questionsNumber = questionsNumber;
     }
 }

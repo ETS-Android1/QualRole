@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
 
         dialog.setTitle("Comece a seguir alguém!");
-        dialog.setMessage("Digite o nome do usuário e o código dele");
+        dialog.setMessage("Digite o nome do usuário e o código");
         dialog.setCancelable(false);
 
         EditText editUserName = new EditText(this);
