@@ -54,11 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseUser user;
-    private FirebaseFirestore db;
 
-    private RecyclerView recyclerQuestions;
-    private AdapterRecyclerQuestions adapter;
-    private List<Question> questionsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +65,6 @@ public class MainActivity extends AppCompatActivity {
         configureTabLayout();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        db = FirebaseFirestore.getInstance();
-
-        //configureRecyclerQuestions();
 
         fab.setOnClickListener(view -> {
             startActivity(new Intent(getApplicationContext(), AddQuestionActivity.class));
@@ -82,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
     private void findViewsById(){
         toolbar = findViewById(R.id.toolbar_main);
         fab = findViewById(R.id.fab_add_question);
-        //recyclerQuestions = findViewById(R.id.recycler_questions);
     }
 
     private void configureToolbar(){
@@ -102,59 +94,6 @@ public class MainActivity extends AppCompatActivity {
         SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.tab_layout_main);
         viewPagerTab.setViewPager(viewPager);
     }
-
-    /*private void createQuestionsList(){
-
-        db.collection("questions").get()
-                .addOnCompleteListener(task -> {
-                    questionsList.clear();
-
-                    for (DocumentSnapshot snapshot : task.getResult()) {
-                        Question question = snapshot.toObject(Question.class);
-                        question.setFirestoreId(snapshot.getId());
-                        questionsList.add(question);
-                    }
-
-                    adapter.notifyDataSetChanged();
-
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("questionsList", e.getMessage());
-                    Toast.makeText(getApplicationContext(), "Falha ao recuperar perguntas", Toast.LENGTH_SHORT);
-                });
-    }
-
-    private void configureRecyclerQuestions(){
-        adapter = new AdapterRecyclerQuestions(questionsList);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-
-        recyclerQuestions.setLayoutManager(layoutManager);
-        recyclerQuestions.setHasFixedSize(true);
-        recyclerQuestions.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayout.VERTICAL));
-
-        recyclerQuestions.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), recyclerQuestions, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Question question = questionsList.get(position);
-
-                Intent intent = new Intent(getApplicationContext(), QuestionActivity.class);
-                intent.putExtra("firestoreId", question.getFirestoreId());
-                startActivity(intent);
-            }
-
-            @Override
-            public void onLongItemClick(View view, int position) {
-
-            }
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-            }
-        }));
-
-        recyclerQuestions.setAdapter(adapter);
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
