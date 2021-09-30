@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import android.widget.Toast;
 import com.android.guicelebrini.qualrole.R;
 import com.android.guicelebrini.qualrole.activity.LoginActivity;
 import com.android.guicelebrini.qualrole.adapter.AdapterRecyclerQuestions;
+import com.android.guicelebrini.qualrole.fragment.FollowingFragment;
+import com.android.guicelebrini.qualrole.fragment.QuestionsFragment;
 import com.android.guicelebrini.qualrole.helper.RecyclerItemClickListener;
 import com.android.guicelebrini.qualrole.model.Question;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -37,6 +40,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,11 +66,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         findViewsById();
         configureToolbar();
+        configureTabLayout();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
-        configureRecyclerQuestions();
+        //configureRecyclerQuestions();
 
         fab.setOnClickListener(view -> {
             startActivity(new Intent(getApplicationContext(), AddQuestionActivity.class));
@@ -75,14 +82,28 @@ public class MainActivity extends AppCompatActivity {
     private void findViewsById(){
         toolbar = findViewById(R.id.toolbar_main);
         fab = findViewById(R.id.fab_add_question);
-        recyclerQuestions = findViewById(R.id.recycler_questions);
+        //recyclerQuestions = findViewById(R.id.recycler_questions);
     }
 
     private void configureToolbar(){
         setSupportActionBar(toolbar);
     }
 
-    private void createQuestionsList(){
+    private void configureTabLayout(){
+        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+                getSupportFragmentManager(), FragmentPagerItems.with(this)
+                .add(R.string.fragment_questions, QuestionsFragment.class)
+                .add(R.string.fragment_following, FollowingFragment.class)
+                .create());
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(adapter);
+
+        SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.tab_layout_main);
+        viewPagerTab.setViewPager(viewPager);
+    }
+
+    /*private void createQuestionsList(){
 
         db.collection("questions").get()
                 .addOnCompleteListener(task -> {
@@ -133,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         }));
 
         recyclerQuestions.setAdapter(adapter);
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -181,6 +202,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        createQuestionsList();
+        //createQuestionsList();
     }
 }
