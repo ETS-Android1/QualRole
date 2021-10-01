@@ -29,8 +29,10 @@ import com.android.guicelebrini.qualrole.activity.LoginActivity;
 import com.android.guicelebrini.qualrole.adapter.AdapterRecyclerQuestions;
 import com.android.guicelebrini.qualrole.fragment.FollowingFragment;
 import com.android.guicelebrini.qualrole.fragment.QuestionsFragment;
+import com.android.guicelebrini.qualrole.helper.Base64Custom;
 import com.android.guicelebrini.qualrole.helper.RecyclerItemClickListener;
 import com.android.guicelebrini.qualrole.model.Question;
+import com.android.guicelebrini.qualrole.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -42,12 +44,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseUser user;
+    private FirebaseFirestore db;
 
 
     @Override
@@ -139,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.setView(editUserName);
 
         dialog.setPositiveButton("Adicionar", (dialogInterface, i) -> {
-            followUser();
+            verifyFollowedUser(editUserName);
         });
 
         dialog.setNegativeButton("Cancelar", (dialogInterface, i) -> {
@@ -149,8 +155,44 @@ public class MainActivity extends AppCompatActivity {
         dialog.create().show();
     }
 
-    private void followUser(){
+    private void verifyFollowedUser(EditText editText){
+        db = FirebaseFirestore.getInstance();
+        String encodedEmail = Base64Custom.encode(user.getEmail());
 
+        String followedUser = editText.getText().toString();
+
+        if (followedUser.equals("")) {
+            Toast.makeText(getApplicationContext(), "Não foi possível encontrar um usuário com essas informações", Toast.LENGTH_SHORT).show();
+        } else {
+            db.collection("users").get()
+                    .addOnCompleteListener(task -> {
+                        for (DocumentSnapshot snapshot : task.getResult()) {
+                            User user = snapshot.toObject(User.class);
+                            String followedUserFirebase = user.getName() + "#" + user.getFollowCode();
+
+                            if (followedUser.equals(followedUserFirebase)){
+                                saveFollowedUser(encodedEmail, user.getEmail());
+                            }
+                        }
+                    });
+            Log.i("Resultado", "Pronto para buscar usuário");
+        }
+    }
+
+    private void saveFollowedUser(String userId, String followedUserEmail){
+        HashMap<String, Object> map = new HashMap<>();
+        String encodedFollowedUserEmail = Base64Custom.encode(followedUserEmail);
+
+        map.put("email", followedUserEmail);
+
+        db.collection("users").document(userId).collection("followedUsers").document(encodedFollowedUserEmail).set(map)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        Toast.makeText(getApplicationContext(), "Usuário seguido com sucesso", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Erro ao seguir usuário", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void googleLogout(){
