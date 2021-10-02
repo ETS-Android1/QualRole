@@ -21,6 +21,7 @@ import com.android.guicelebrini.qualrole.activity.QuestionActivity;
 import com.android.guicelebrini.qualrole.adapter.AdapterRecyclerQuestions;
 import com.android.guicelebrini.qualrole.helper.RecyclerItemClickListener;
 import com.android.guicelebrini.qualrole.model.Question;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -42,9 +43,15 @@ public class QuestionsFragment extends Fragment {
     private AdapterRecyclerQuestions adapter;
     private List<Question> questionsList = new ArrayList<>();
 
+    private String loggedUserId = "";
+
 
     public QuestionsFragment() {
         // Required empty public constructor
+    }
+
+    public QuestionsFragment(String loggedUserId){
+        this.loggedUserId = loggedUserId;
     }
 
 
@@ -71,7 +78,15 @@ public class QuestionsFragment extends Fragment {
 
     private void createQuestionsList(){
 
-        db.collection("questions").get()
+        CollectionReference reference;
+
+        if (loggedUserId.equals("")){
+            reference = db.collection("questions");
+        } else {
+            reference = db.collection("users").document(loggedUserId).collection("questions");
+        }
+
+        reference.get()
                 .addOnCompleteListener(task -> {
                     questionsList.clear();
 

@@ -76,4 +76,16 @@
         app:layout_constraintEnd_toEndOf="@+id/tv_profile_email"
         app:layout_constraintStart_toStartOf="@+id/tv_profile_email"
         app:layout_constraintTop_toBottomOf="@+id/tv_profile_email" />
+
+    <FrameLayout
+        android:id="@+id/frameQuestionsFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline5">
+
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
