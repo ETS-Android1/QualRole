@@ -14,6 +14,13 @@ public class User {
         this.email = email;
     }
 
+    public User(String name, String email, int followCode, int questionsNumber) {
+        this.name = name;
+        this.email = email;
+        this.followCode = followCode;
+        this.questionsNumber = questionsNumber;
+    }
+
     public String getName() {
         return name;
     }
