@@ -52,4 +52,14 @@ public class User {
     public void setQuestionsNumber(int questionsNumber) {
         this.questionsNumber = questionsNumber;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", followCode=" + followCode +
+                ", questionsNumber=" + questionsNumber +
+                '}';
+    }
 }
