@@ -4,14 +4,16 @@ public class User {
 
     private String name;
     private String email;
+    private String urlProfileImage;
     private int followCode;
     private int questionsNumber = 0;
 
     public User(){}
 
-    public User(String name, String email){
+    public User(String name, String email, String urlProfileImage){
         this.name = name;
         this.email = email;
+        this.urlProfileImage = urlProfileImage;
     }
 
     public User(String name, String email, int followCode, int questionsNumber) {
@@ -35,6 +37,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUrlProfileImage() {
+        return urlProfileImage;
+    }
+
+    public void setUrlProfileImage(String urlProfileImage) {
+        this.urlProfileImage = urlProfileImage;
     }
 
     public int getFollowCode() {

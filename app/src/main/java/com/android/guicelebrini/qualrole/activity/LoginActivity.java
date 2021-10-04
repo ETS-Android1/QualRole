@@ -127,6 +127,7 @@ public class LoginActivity extends AppCompatActivity {
         String userName = firebaseUser.getDisplayName();
         String userEmail = firebaseUser.getEmail();
         String encodedEmail = Base64Custom.encode(userEmail);
+        String urlProfileImage = firebaseUser.getPhotoUrl().toString();
 
         db.collection("users").document(encodedEmail).get()
                 .addOnCompleteListener(task -> {
@@ -136,13 +137,27 @@ public class LoginActivity extends AppCompatActivity {
                         Preferences preferences = new Preferences(getApplicationContext());
                         User user = reference.toObject(User.class);
                         preferences.saveData("#" + user.getFollowCode());
+                        updateFirestoreInfos(encodedEmail, userName, urlProfileImage);
                     } else {
-                        User user = new User(userName, userEmail);
+                        User user = new User(userName, userEmail, urlProfileImage);
                         createFollowCode(user);
                     }
                 });
 
     }
+
+    private void updateFirestoreInfos(String encodedEmail, String userName, String urlProfileImage) {
+        db.collection("users").document(encodedEmail).update("name", userName, "urlProfileImage", urlProfileImage)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.i("Resultado", "Informations updated succesfully");
+                    } else {
+                        Log.i("Resultado", "Informations updated failed");
+                    }
+                });
+
+    }
+
 
     private void createFollowCode(User user){
 
