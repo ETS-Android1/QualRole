@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class InfosActivity extends AppCompatActivity {
     private FirebaseUser googleUser;
 
     private String firestoreId;
+    private boolean isFromLoggedUser;
 
     private QuestionsFragment questionsFragment;
 
@@ -45,8 +47,10 @@ public class InfosActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null){
+            isFromLoggedUser = false;
             firestoreId = extras.getString("firestoreId");
         } else {
+            isFromLoggedUser = true;
             firestoreId = Base64Custom.encode(googleUser.getEmail());
         }
 
@@ -74,7 +78,13 @@ public class InfosActivity extends AppCompatActivity {
 
         Picasso.get().load(user.getUrlProfileImage()).into(imageProfile);
         textName.setText(user.getName());
-        textEmail.setText(user.getEmail());
+
+        if (isFromLoggedUser){
+            textEmail.setText(user.getEmail());
+        } else {
+            textEmail.setVisibility(View.GONE);
+        }
+
         textFollowCode.setText("#" + user.getFollowCode());
 
         loadQuestionsList(firestoreId);

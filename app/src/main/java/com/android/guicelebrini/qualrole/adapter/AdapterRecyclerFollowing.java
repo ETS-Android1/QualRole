@@ -57,6 +57,8 @@ public class AdapterRecyclerFollowing extends RecyclerView.Adapter<AdapterRecycl
 
             if (user.getQuestionsNumber() == 0){
                 this.textQuestionsNumber.setText("Nenhuma pergunta feita");
+            } else if (user.getQuestionsNumber() == 1 ) {
+                this.textQuestionsNumber.setText(user.getQuestionsNumber() + " pergunta feita");
             } else {
                 this.textQuestionsNumber.setText(user.getQuestionsNumber() + " perguntas feitas");
             }
