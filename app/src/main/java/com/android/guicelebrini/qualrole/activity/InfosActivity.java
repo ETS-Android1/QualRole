@@ -11,9 +11,12 @@ import com.android.guicelebrini.qualrole.R;
 import com.android.guicelebrini.qualrole.fragment.QuestionsFragment;
 import com.android.guicelebrini.qualrole.helper.Base64Custom;
 import com.android.guicelebrini.qualrole.helper.Preferences;
+import com.android.guicelebrini.qualrole.model.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
@@ -22,8 +25,10 @@ public class InfosActivity extends AppCompatActivity {
     private ShapeableImageView imageProfile;
     private TextView textName, textEmail, textFollowCode;
 
-    private FirebaseAuth auth;
-    private FirebaseUser user;
+    private FirebaseFirestore db;
+    private FirebaseUser googleUser;
+
+    private String firestoreId;
 
     private QuestionsFragment questionsFragment;
 
@@ -34,9 +39,18 @@ public class InfosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_infos);
         findViewsById();
 
-        getUserFromFirebase();
+        db = FirebaseFirestore.getInstance();
+        googleUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        setInfos(user);
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null){
+            firestoreId = extras.getString("firestoreId");
+        } else {
+            firestoreId = Base64Custom.encode(googleUser.getEmail());
+        }
+
+        getUserFromFirebase(firestoreId);
     }
 
     private void findViewsById(){
@@ -46,25 +60,28 @@ public class InfosActivity extends AppCompatActivity {
         textFollowCode = findViewById(R.id.tv_follow_code);
     }
 
-    private void getUserFromFirebase(){
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
+    private void getUserFromFirebase(String firestoreId){
+
+        db.collection("users").document(firestoreId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    User user = documentSnapshot.toObject(User.class);
+                    setInfos(user);
+                });
+
     }
 
-    private void setInfos(FirebaseUser user) {
-        Preferences preferences = new Preferences(getApplicationContext());
+    private void setInfos(User user) {
 
-        Picasso.get().load(user.getPhotoUrl()).into(imageProfile);
-        textName.setText(user.getDisplayName());
+        Picasso.get().load(user.getUrlProfileImage()).into(imageProfile);
+        textName.setText(user.getName());
         textEmail.setText(user.getEmail());
-        textFollowCode.setText(preferences.getFollowCode());
+        textFollowCode.setText("#" + user.getFollowCode());
 
-        String encodedEmail = Base64Custom.encode(user.getEmail());
-        loadQuestionsList(encodedEmail);
+        loadQuestionsList(firestoreId);
     }
 
-    private void loadQuestionsList(String encodedEmail) {
-        questionsFragment = new QuestionsFragment(encodedEmail);
+    private void loadQuestionsList(String firestoreId) {
+        questionsFragment = new QuestionsFragment(firestoreId);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameQuestionsFragment, questionsFragment);

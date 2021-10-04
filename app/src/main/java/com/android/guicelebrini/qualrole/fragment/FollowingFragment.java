@@ -1,5 +1,6 @@
 package com.android.guicelebrini.qualrole.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,11 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import com.android.guicelebrini.qualrole.R;
+import com.android.guicelebrini.qualrole.activity.InfosActivity;
 import com.android.guicelebrini.qualrole.adapter.AdapterRecyclerFollowing;
 import com.android.guicelebrini.qualrole.helper.Base64Custom;
+import com.android.guicelebrini.qualrole.helper.RecyclerItemClickListener;
 import com.android.guicelebrini.qualrole.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -116,6 +120,27 @@ public class FollowingFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         recyclerFollowing.setLayoutManager(layoutManager);
         recyclerFollowing.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayout.VERTICAL));
+
+        recyclerFollowing.addOnItemTouchListener(new RecyclerItemClickListener(view.getContext(), recyclerFollowing, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                String firestoreId = Base64Custom.encode(usersList.get(position).getEmail());
+
+                Intent intent = new Intent(view.getContext(), InfosActivity.class);
+                intent.putExtra("firestoreId", firestoreId);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        }));
 
         recyclerFollowing.setAdapter(adapter);
     }
