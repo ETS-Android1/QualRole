@@ -67,7 +67,7 @@ public class FollowingFragment extends Fragment {
         return view;
     }
 
-    private void createUsersList(){
+    public void createUsersList(){
 
         String encodedEmail = Base64Custom.encode(user.getEmail());
 

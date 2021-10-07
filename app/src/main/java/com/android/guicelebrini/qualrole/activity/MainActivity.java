@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseFirestore db;
 
+    private ViewPager viewPager;
+    private static final int FOLLOWING_TAB_INDEX = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.string.fragment_following, FollowingFragment.class)
                 .create());
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
 
         SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.tab_layout_main);
@@ -175,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-            Log.i("Resultado", "Pronto para buscar usuário");
         }
     }
 
@@ -189,6 +190,11 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
                         Toast.makeText(getApplicationContext(), "Usuário seguido com sucesso", Toast.LENGTH_SHORT).show();
+                        FollowingFragment fragment = (FollowingFragment) viewPager
+                                .getAdapter()
+                                .instantiateItem(viewPager, FOLLOWING_TAB_INDEX);
+                        fragment.createUsersList();
+
                     } else {
                         Toast.makeText(getApplicationContext(), "Erro ao seguir usuário", Toast.LENGTH_SHORT).show();
                     }
