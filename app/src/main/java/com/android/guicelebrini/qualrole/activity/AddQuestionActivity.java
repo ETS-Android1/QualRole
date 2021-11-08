@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.android.guicelebrini.qualrole.R;
 import com.android.guicelebrini.qualrole.helper.Base64Custom;
+import com.android.guicelebrini.qualrole.helper.Preferences;
 import com.android.guicelebrini.qualrole.model.Question;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,6 +32,8 @@ public class AddQuestionActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseFirestore db;
 
+    private Preferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
+        preferences = new Preferences(getApplicationContext());
 
         buttonAdd.setOnClickListener(view -> {
             addQuestionInFirebase();
@@ -65,11 +70,13 @@ public class AddQuestionActivity extends AppCompatActivity {
         String insertedMoney = editMoney.getText().toString();
         String encodedEmail = Base64Custom.encode(user.getEmail());
 
+        String questionUser = user.getDisplayName() + " " + preferences.getFollowCode();
+
         if (title.equals("") || description.equals("") || city.equals("") || insertedMoney.equals("")){
             Toast.makeText(getApplicationContext(), "Por favor, insira valores válidos", Toast.LENGTH_SHORT).show();
         } else {
             double money = Double.parseDouble(insertedMoney);
-            Question question = new Question(title, description, user.getDisplayName(), city, money);
+            Question question = new Question(title, description, questionUser, city, money);
 
             db.collection("questions").add(question)
                     .addOnCompleteListener(task -> {
