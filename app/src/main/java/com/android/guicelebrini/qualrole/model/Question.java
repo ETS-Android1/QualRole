@@ -1,6 +1,7 @@
 package com.android.guicelebrini.qualrole.model;
 
 import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.FieldValue;
 
 public class Question {
 
@@ -10,9 +11,12 @@ public class Question {
     private String city;
     private double moneyAvailable;
     private String firestoreId;
+    private FieldValue createdAt;
 
     public Question(){
     }
+
+
 
     public Question(String title, String description, String user, String city, double moneyAvailable) {
         this.title = title;
@@ -20,6 +24,7 @@ public class Question {
         this.user = user;
         this.city = city;
         this.moneyAvailable = moneyAvailable;
+        this.createdAt = FieldValue.serverTimestamp();
     }
 
     public String getTitle() {
@@ -69,5 +74,13 @@ public class Question {
 
     public void setFirestoreId(String firestoreId) {
         this.firestoreId = firestoreId;
+    }
+
+    public FieldValue getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(FieldValue createdAt) {
+        this.createdAt = createdAt;
     }
 }

@@ -24,6 +24,7 @@ import com.android.guicelebrini.qualrole.model.Question;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,12 +87,24 @@ public class QuestionsFragment extends Fragment {
             reference = db.collection("users").document(loggedUserId).collection("questions");
         }
 
-        reference.get()
+        reference.orderBy("createdAt", Query.Direction.DESCENDING).get()
                 .addOnCompleteListener(task -> {
                     questionsList.clear();
 
                     for (DocumentSnapshot snapshot : task.getResult()) {
-                        Question question = snapshot.toObject(Question.class);
+                        //Question question = snapshot.toObject(Question.class);
+                        String title = snapshot.getString("title");
+                        String description = snapshot.getString("description");
+                        String user = snapshot.getString("user");
+                        String city = snapshot.getString("city");
+                        double moneyAvailable = snapshot.getDouble("moneyAvailable");
+
+                        Question question = new Question();
+                        question.setTitle(title);
+                        question.setDescription(description);
+                        question.setUser(user);
+                        question.setCity(city);
+                        question.setMoneyAvailable(moneyAvailable);
                         question.setFirestoreId(snapshot.getId());
                         questionsList.add(question);
                     }
