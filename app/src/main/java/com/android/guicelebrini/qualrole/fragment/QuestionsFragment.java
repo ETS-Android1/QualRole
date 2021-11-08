@@ -111,7 +111,7 @@ public class QuestionsFragment extends Fragment {
 
         recyclerQuestions.setLayoutManager(layoutManager);
         recyclerQuestions.setHasFixedSize(true);
-        recyclerQuestions.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayout.VERTICAL));
+        //recyclerQuestions.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayout.VERTICAL));
 
         recyclerQuestions.addOnItemTouchListener(new RecyclerItemClickListener(view.getContext(), recyclerQuestions, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
