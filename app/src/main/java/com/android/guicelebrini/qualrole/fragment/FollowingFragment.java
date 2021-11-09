@@ -119,7 +119,6 @@ public class FollowingFragment extends Fragment {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         recyclerFollowing.setLayoutManager(layoutManager);
-        recyclerFollowing.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayout.VERTICAL));
 
         recyclerFollowing.addOnItemTouchListener(new RecyclerItemClickListener(view.getContext(), recyclerFollowing, new RecyclerItemClickListener.OnItemClickListener() {
             @Override

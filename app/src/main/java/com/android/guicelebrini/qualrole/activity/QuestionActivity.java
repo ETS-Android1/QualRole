@@ -80,7 +80,21 @@ public class QuestionActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
                         DocumentSnapshot snapshot = task.getResult();
-                        Question firestoreQuestion = snapshot.toObject(Question.class);
+                        Question firestoreQuestion = new Question();
+
+                        String title = snapshot.getString("title");
+                        String description = snapshot.getString("description");
+                        String user = snapshot.getString("user");
+                        String city = snapshot.getString("city");
+                        double moneyAvailable = snapshot.getDouble("moneyAvailable");
+
+                        firestoreQuestion.setTitle(title);
+                        firestoreQuestion.setDescription(description);
+                        firestoreQuestion.setUser(user);
+                        firestoreQuestion.setCity(city);
+                        firestoreQuestion.setMoneyAvailable(moneyAvailable);
+                        firestoreQuestion.setFirestoreId(snapshot.getId());
+
                         set(firestoreQuestion);
                     }
                 });
