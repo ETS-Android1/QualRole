@@ -17,6 +17,7 @@ import com.android.guicelebrini.qualrole.helper.Preferences;
 import com.android.guicelebrini.qualrole.model.Question;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -25,12 +26,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AddQuestionActivity extends AppCompatActivity {
 
-    private Button buttonAdd, buttonNoMoney;
+    private Button buttonAdd;
     private EditText editTitle, editDesc, editCity, editMoney;
+    private TextInputLayout moneyLayout;
 
     private FirebaseAuth auth;
     private FirebaseUser user;
     private FirebaseFirestore db;
+
+    private Toolbar toolbar;
 
     private Preferences preferences;
 
@@ -43,24 +47,36 @@ public class AddQuestionActivity extends AppCompatActivity {
         user = auth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
         preferences = new Preferences(getApplicationContext());
+        configureToolbar();
 
-        buttonAdd.setOnClickListener(view -> {
+        /*buttonAdd.setOnClickListener(view -> {
             addQuestionInFirebase();
-        });
+        });*/
 
-        buttonNoMoney.setOnClickListener(view -> {
+        moneyLayout.setEndIconOnClickListener(view -> {
             editMoney.setText("00.00");
         });
 
     }
 
     private void findViewsById(){
-        buttonAdd = findViewById(R.id.button_add_question);
-        buttonNoMoney = findViewById(R.id.button_question_no_money);
+        //buttonAdd = findViewById(R.id.button_add_question);
         editTitle = findViewById(R.id.edit_question_title);
         editDesc = findViewById(R.id.edit_question_desc);
         editCity = findViewById(R.id.edit_question_city);
         editMoney = findViewById(R.id.edit_question_money);
+
+        moneyLayout = findViewById(R.id.textInputLayout4);
+
+        toolbar = findViewById(R.id.toolbar_add_question);
+    }
+
+    private void configureToolbar(){
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Adicione uma pergunta");
+        //toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     private void addQuestionInFirebase(){
