@@ -49,9 +49,9 @@ public class AddQuestionActivity extends AppCompatActivity {
         preferences = new Preferences(getApplicationContext());
         configureToolbar();
 
-        /*buttonAdd.setOnClickListener(view -> {
+        buttonAdd.setOnClickListener(view -> {
             addQuestionInFirebase();
-        });*/
+        });
 
         moneyLayout.setEndIconOnClickListener(view -> {
             editMoney.setText("00.00");
@@ -60,7 +60,7 @@ public class AddQuestionActivity extends AppCompatActivity {
     }
 
     private void findViewsById(){
-        //buttonAdd = findViewById(R.id.button_add_question);
+        buttonAdd = findViewById(R.id.button_add_question);
         editTitle = findViewById(R.id.edit_question_title);
         editDesc = findViewById(R.id.edit_question_desc);
         editCity = findViewById(R.id.edit_question_city);
@@ -74,8 +74,7 @@ public class AddQuestionActivity extends AppCompatActivity {
     private void configureToolbar(){
         setSupportActionBar(toolbar);
         toolbar.setTitle("Adicione uma pergunta");
-        //toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
