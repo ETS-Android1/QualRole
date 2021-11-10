@@ -7,14 +7,20 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.guicelebrini.qualrole.R;
+import com.android.guicelebrini.qualrole.api.LocationService;
 import com.android.guicelebrini.qualrole.helper.Base64Custom;
 import com.android.guicelebrini.qualrole.helper.Preferences;
+import com.android.guicelebrini.qualrole.model.City;
 import com.android.guicelebrini.qualrole.model.Question;
+import com.android.guicelebrini.qualrole.model.State;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -24,11 +30,21 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class AddQuestionActivity extends AppCompatActivity {
 
     private Button buttonAdd;
     private EditText editTitle, editDesc, editCity, editMoney;
     private TextInputLayout moneyLayout;
+    private AutoCompleteTextView dropdownStates, dropdownCities;
 
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -38,8 +54,13 @@ public class AddQuestionActivity extends AppCompatActivity {
 
     private Preferences preferences;
 
+    private Retrofit retrofit;
+    private String urlApiIbge = "https://servicodados.ibge.gov.br/api/v1/localidades/";
     private String state;
     private String completeAdress = "";
+
+    private List<State> statesList = new ArrayList<>();
+    private List<City> citiesList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +73,12 @@ public class AddQuestionActivity extends AppCompatActivity {
         preferences = new Preferences(getApplicationContext());
         configureToolbar();
 
+        retrofit = new Retrofit.Builder()
+                .baseUrl(urlApiIbge)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
+        getStatesRetrofit();
 
         buttonAdd.setOnClickListener(view -> {
             addQuestionInFirebase();
@@ -60,6 +86,10 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         moneyLayout.setEndIconOnClickListener(view -> {
             editMoney.setText("00.00");
+        });
+
+        dropdownStates.setOnItemClickListener((parent, view, position, l) -> {
+            
         });
 
     }
@@ -71,6 +101,9 @@ public class AddQuestionActivity extends AppCompatActivity {
         editMoney = findViewById(R.id.edit_question_money);
 
         moneyLayout = findViewById(R.id.textInputLayout4);
+
+        dropdownStates = findViewById(R.id.dropdown_states);
+        dropdownCities = findViewById(R.id.dropdown_cities);
 
         toolbar = findViewById(R.id.toolbar_add_question);
     }
@@ -85,7 +118,6 @@ public class AddQuestionActivity extends AppCompatActivity {
     private void addQuestionInFirebase(){
         String title = editTitle.getText().toString();
         String description = editDesc.getText().toString();
-        String city = editCity.getText().toString();
         String insertedMoney = editMoney.getText().toString();
         String encodedEmail = Base64Custom.encode(user.getEmail());
 
@@ -95,7 +127,7 @@ public class AddQuestionActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Por favor, insira valores válidos", Toast.LENGTH_SHORT).show();
         } else {
             double money = Double.parseDouble(insertedMoney);
-            Question question = new Question(title, description, questionUser, city, money);
+            Question question = new Question(title, description, questionUser, "city", money);
 
             db.collection("questions").add(question)
                     .addOnCompleteListener(task -> {
@@ -125,4 +157,41 @@ public class AddQuestionActivity extends AppCompatActivity {
         }
         
     }
+
+    private void getStatesRetrofit(){
+
+        LocationService locationService = retrofit.create(LocationService.class);
+        Call<List<State>> statesCall = locationService.getStates();
+
+        statesCall.enqueue(new Callback<List<State>>() {
+            @Override
+            public void onResponse(Call<List<State>> call, Response<List<State>> response) {
+                statesList = response.body();
+
+                putInDropdownStates(statesList);
+
+                for (int i = 0; i < statesList.size(); i++){
+
+                    State state = statesList.get(i);
+                    Log.i("Estados", state.toString());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<State>> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void putInDropdownStates(List<State> statesList){
+        ArrayAdapter<State> adapter = new ArrayAdapter<State>(getApplicationContext(), R.layout.dropdown_item, statesList);
+        adapter.setDropDownViewResource(R.layout.dropdown_item);
+
+        dropdownStates.setAdapter(adapter);
+    }
+
+
 }
