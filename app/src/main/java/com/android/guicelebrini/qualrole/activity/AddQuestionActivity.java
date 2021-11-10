@@ -38,6 +38,9 @@ public class AddQuestionActivity extends AppCompatActivity {
 
     private Preferences preferences;
 
+    private String state;
+    private String completeAdress = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,8 @@ public class AddQuestionActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         preferences = new Preferences(getApplicationContext());
         configureToolbar();
+
+
 
         buttonAdd.setOnClickListener(view -> {
             addQuestionInFirebase();
@@ -63,7 +68,6 @@ public class AddQuestionActivity extends AppCompatActivity {
         buttonAdd = findViewById(R.id.button_add_question);
         editTitle = findViewById(R.id.edit_question_title);
         editDesc = findViewById(R.id.edit_question_desc);
-        editCity = findViewById(R.id.edit_question_city);
         editMoney = findViewById(R.id.edit_question_money);
 
         moneyLayout = findViewById(R.id.textInputLayout4);
@@ -87,7 +91,7 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         String questionUser = user.getDisplayName() + " " + preferences.getFollowCode();
 
-        if (title.equals("") || description.equals("") || city.equals("") || insertedMoney.equals("")){
+        if (title.equals("") || description.equals("") || completeAdress.equals("") || insertedMoney.equals("")){
             Toast.makeText(getApplicationContext(), "Por favor, insira valores válidos", Toast.LENGTH_SHORT).show();
         } else {
             double money = Double.parseDouble(insertedMoney);
