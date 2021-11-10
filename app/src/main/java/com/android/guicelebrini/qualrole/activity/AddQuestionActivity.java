@@ -42,7 +42,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AddQuestionActivity extends AppCompatActivity {
 
     private Button buttonAdd;
-    private EditText editTitle, editDesc, editCity, editMoney;
+    private EditText editTitle, editDesc, editMoney;
     private TextInputLayout moneyLayout;
     private AutoCompleteTextView dropdownStates, dropdownCities;
 
@@ -89,7 +89,15 @@ public class AddQuestionActivity extends AppCompatActivity {
         });
 
         dropdownStates.setOnItemClickListener((parent, view, position, l) -> {
-            
+            dropdownCities.setText("");
+            String selectedState = parent.getItemAtPosition(position).toString();
+            getCitiesFromStateRetrofit(selectedState);
+            state = selectedState;
+        });
+
+        dropdownCities.setOnItemClickListener((parent, view, position, l) -> {
+            String selectedCity = parent.getItemAtPosition(position).toString();
+            completeAdress = selectedCity + ", " + state;
         });
 
     }
@@ -127,7 +135,7 @@ public class AddQuestionActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Por favor, insira valores válidos", Toast.LENGTH_SHORT).show();
         } else {
             double money = Double.parseDouble(insertedMoney);
-            Question question = new Question(title, description, questionUser, "city", money);
+            Question question = new Question(title, description, questionUser, completeAdress, money);
 
             db.collection("questions").add(question)
                     .addOnCompleteListener(task -> {
@@ -193,5 +201,39 @@ public class AddQuestionActivity extends AppCompatActivity {
         dropdownStates.setAdapter(adapter);
     }
 
+    private void getCitiesFromStateRetrofit(String stateInitials) {
+        LocationService locationService = retrofit.create(LocationService.class);
+        Call<List<City>> citiesCall = locationService.getCitiesFromState(stateInitials);
+
+        citiesCall.enqueue(new Callback<List<City>>() {
+            @Override
+            public void onResponse(Call<List<City>> call, Response<List<City>> response) {
+                if (response.isSuccessful()){
+                    citiesList = response.body();
+
+                    putInDropdownCities(citiesList);
+
+                    for (int i = 0; i < citiesList.size(); i++){
+
+                        City city = citiesList.get(i);
+                        Log.i("Cidade", city.toString());
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<City>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void putInDropdownCities(List<City> citiesList){
+        ArrayAdapter<City> adapter = new ArrayAdapter<City>(getApplicationContext(), R.layout.dropdown_item, citiesList);
+        adapter.setDropDownViewResource(R.layout.dropdown_item);
+        dropdownCities.setAdapter(adapter);
+    }
 
 }
