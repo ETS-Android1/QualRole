@@ -7,12 +7,14 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/QualRole/app/src/main/res/drawable/ic_baseline_location_city_24.xml" value="0.2203125" />
         <entry key="..\:/Users/User/AndroidStudioProjects/QualRole/app/src/main/res/drawable/ic_baseline_money_off_24.xml" value="0.2203125" />
         <entry key="..\:/Users/User/AndroidStudioProjects/QualRole/app/src/main/res/drawable/layout_item_questions_list.xml" value="0.2203125" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/QualRole/app/src/main/res/drawable/layout_item_user_questions_list.xml" value="0.2203125" />
         <entry key="..\:/Users/User/AndroidStudioProjects/QualRole/app/src/main/res/layout/activity_add_question.xml" value="0.33" />
         <entry key="..\:/Users/User/AndroidStudioProjects/QualRole/app/src/main/res/layout/activity_infos.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/User/AndroidStudioProjects/QualRole/app/src/main/res/layout/activity_login.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/User/AndroidStudioProjects/QualRole/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/User/AndroidStudioProjects/QualRole/app/src/main/res/layout/dropdown_item.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/User/AndroidStudioProjects/QualRole/app/src/main/res/layout/item_questions_list.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/QualRole/app/src/main/res/layout/item_user_questions_list.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/User/AndroidStudioProjects/QualRole/app/src/main/res/layout/item_users_list.xml" value="0.33" />
       </map>
     </option>
