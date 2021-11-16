@@ -16,14 +16,22 @@ import java.util.List;
 public class AdapterRecyclerQuestions extends RecyclerView.Adapter<AdapterRecyclerQuestions.MyViewHolder> {
 
     private List<Question> questionsList;
+    private int whichLayout; //if 0 is MainActivity layout, if 1 is InfosActivity layout
 
-    public AdapterRecyclerQuestions(List<Question> questionsList){
+    public AdapterRecyclerQuestions(List<Question> questionsList, int whichLayout){
         this.questionsList = questionsList;
+        this.whichLayout = whichLayout;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_questions_list, parent, false);
+        View itemView;
+
+        if (whichLayout == 0){
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_questions_list, parent, false);
+        } else {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_questions_list, parent, false);
+        }
 
         return new MyViewHolder(itemView);
     }

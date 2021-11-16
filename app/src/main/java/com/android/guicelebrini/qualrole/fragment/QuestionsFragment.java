@@ -119,7 +119,14 @@ public class QuestionsFragment extends Fragment {
     }
 
     private void configureRecyclerQuestions(){
-        adapter = new AdapterRecyclerQuestions(questionsList);
+
+        if (loggedUserId.equals("")){
+            adapter = new AdapterRecyclerQuestions(questionsList, 0);
+        } else {
+            adapter = new AdapterRecyclerQuestions(questionsList, 1);
+        }
+
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
 
         recyclerQuestions.setLayoutManager(layoutManager);
