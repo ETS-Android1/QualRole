@@ -36,7 +36,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/qual_role_logo_transparente" />
+        app:srcCompat="@drawable/qual_role_transparent_logo" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_button"
