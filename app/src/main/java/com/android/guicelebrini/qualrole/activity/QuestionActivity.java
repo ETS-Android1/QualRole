@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,7 @@ import java.util.List;
 public class QuestionActivity extends AppCompatActivity {
 
     private TextView textTitle, textUser, textDesc, textCity, textMoney, textNoAnswers;
+    private ImageView imageUser;
 
     private String firestoreQuestionId;
 
@@ -69,6 +72,8 @@ public class QuestionActivity extends AppCompatActivity {
         textCity = findViewById(R.id.tv_question_city);
         textMoney = findViewById(R.id.tv_question_money);
         textNoAnswers = findViewById(R.id.tv_question_no_answers);
+
+        imageUser = findViewById(R.id.iv_question_user);
 
         recyclerAnswers = findViewById(R.id.recycler_answers);
     }
@@ -129,7 +134,9 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void set(User user){
-        textUser.setText(user.getName());
+        textUser.setText(user.getName() + " #" + user.getFollowCode());
+
+        Picasso.get().load(user.getUrlProfileImage()).into(imageUser);
     }
 
     public void goToAddAnswerActivity(View view){
