@@ -2,6 +2,7 @@ package com.android.guicelebrini.qualrole.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -35,6 +36,8 @@ import com.android.guicelebrini.qualrole.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -52,6 +55,7 @@ public class QuestionActivity extends AppCompatActivity {
     private String firestoreQuestionId;
 
     private FirebaseFirestore db;
+    private FirebaseUser user;
 
     private RecyclerView recyclerAnswers;
     private AdapterRecyclerAnswers adapter;
@@ -66,6 +70,7 @@ public class QuestionActivity extends AppCompatActivity {
         getExtras();
 
         db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         getQuestionInFirebase();
 
@@ -207,7 +212,13 @@ public class QuestionActivity extends AppCompatActivity {
 
             @Override
             public void onLongItemClick(View view, int position) {
+                Answer answer = answersList.get(position);
+                String userEmail = user.getEmail();
+                int deletePosition = position;
 
+                if (answer.getUserEmail().equals(userEmail)){
+                    openDeleteDialog(firestoreQuestionId, answer.getFirestoreId(), deletePosition);
+                }
             }
 
             @Override
@@ -218,6 +229,37 @@ public class QuestionActivity extends AppCompatActivity {
 
         recyclerAnswers.setAdapter(adapter);
     }
+
+    private void openDeleteDialog(String firestoreQuestionId, String firestoreAnswerId, int deletePosition) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(QuestionActivity.this);
+
+        dialog.setTitle("Excluir resposta");
+        dialog.setMessage("Você tem certeza que deseja excluir sua resposta?");
+        dialog.setCancelable(false);
+
+
+        dialog.setPositiveButton("Excluir", (dialogInterface, i) -> {
+            deleteAnswer(firestoreQuestionId, firestoreAnswerId, deletePosition);
+        });
+
+        dialog.setNegativeButton("Cancelar", (dialogInterface, i) -> {
+
+        });
+
+        dialog.create().show();
+    }
+
+    private void deleteAnswer(String firestoreQuestionId, String firestoreAnswerId, int deletePosition) {
+
+        db.collection("questions").document(firestoreQuestionId)
+                .collection("answers").document(firestoreAnswerId).delete().addOnSuccessListener(unused -> {
+                    answersList.remove(deletePosition);
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(getApplicationContext(), "Resposta excluída com sucesso", Toast.LENGTH_SHORT).show();
+                });
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

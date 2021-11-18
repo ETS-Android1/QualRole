@@ -204,7 +204,7 @@ public class QuestionsFragment extends Fragment {
                                 .update("questionsNumber", FieldValue.increment(-1)).addOnSuccessListener(unused2 -> {
                                     questionsList.remove(deletePosition);
                                     adapter.notifyDataSetChanged();
-                                    Toast.makeText(view.getContext(), "Pergunta removida com sucesso", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(view.getContext(), "Pergunta excluída com sucesso", Toast.LENGTH_SHORT).show();
                                 });
                     });
         });
