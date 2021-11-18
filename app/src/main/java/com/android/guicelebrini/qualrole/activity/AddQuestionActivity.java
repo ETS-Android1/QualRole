@@ -130,12 +130,13 @@ public class AddQuestionActivity extends AppCompatActivity {
         String encodedEmail = Base64Custom.encode(user.getEmail());
 
         String questionUser = user.getDisplayName() + " " + preferences.getFollowCode();
+        String questionUserEmail = user.getEmail();
 
         if (title.equals("") || description.equals("") || completeAdress.equals("") || insertedMoney.equals("")){
             Toast.makeText(getApplicationContext(), "Por favor, insira valores válidos", Toast.LENGTH_SHORT).show();
         } else {
             double money = Double.parseDouble(insertedMoney);
-            Question question = new Question(title, description, questionUser, completeAdress, money);
+            Question question = new Question(title, description, questionUser, questionUserEmail, completeAdress, money);
 
             db.collection("questions").add(question)
                     .addOnCompleteListener(task -> {

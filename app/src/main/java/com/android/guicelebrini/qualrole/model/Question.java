@@ -8,6 +8,7 @@ public class Question {
     private String title;
     private String description;
     private String user;
+    private String userEmail;
     private String city;
     private double moneyAvailable;
     private String firestoreId;
@@ -16,12 +17,11 @@ public class Question {
     public Question(){
     }
 
-
-
-    public Question(String title, String description, String user, String city, double moneyAvailable) {
+    public Question(String title, String description, String user, String userEmail, String city, double moneyAvailable) {
         this.title = title;
         this.description = description;
         this.user = user;
+        this.userEmail = userEmail;
         this.city = city;
         this.moneyAvailable = moneyAvailable;
         this.createdAt = FieldValue.serverTimestamp();
@@ -49,6 +49,14 @@ public class Question {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getCity() {
