@@ -19,7 +19,7 @@
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="FollowingPhotoShape">
+    <style name="QuestionPhotoShape">
         <item name="cornerSize">50%</item>
     </style>
 
