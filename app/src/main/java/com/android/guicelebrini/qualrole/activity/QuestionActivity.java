@@ -14,6 +14,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -152,7 +155,7 @@ public class QuestionActivity extends AppCompatActivity {
         Picasso.get().load(user.getUrlProfileImage()).into(imageUser);
     }
 
-    public void goToAddAnswerActivity(View view){
+    public void goToAddAnswerActivity(){
         Intent intent = new Intent(getApplicationContext(), AddAnswerActivity.class);
         intent.putExtra("firestoreId", firestoreQuestionId);
         startActivity(intent);
@@ -193,6 +196,27 @@ public class QuestionActivity extends AppCompatActivity {
         recyclerAnswers.setHasFixedSize(true);
 
         recyclerAnswers.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_toolbar_question, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_add_comment:
+                goToAddAnswerActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     @Override
