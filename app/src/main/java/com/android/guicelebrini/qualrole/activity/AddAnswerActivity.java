@@ -63,7 +63,7 @@ public class AddAnswerActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Por favor, insira valores válidos", Toast.LENGTH_SHORT).show();
         } else {
 
-            String userName = user.getDisplayName() + " #" + preferences.getFollowCode();
+            String userName = user.getDisplayName() + " " + preferences.getFollowCode();
 
             Answer answer = new Answer(description, userName);
             db.collection("questions").document(questionFirestoreId).collection("answers").add(answer)
