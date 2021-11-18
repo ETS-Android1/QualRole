@@ -3,6 +3,7 @@ package com.android.guicelebrini.qualrole.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,16 +14,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.guicelebrini.qualrole.R;
+import com.android.guicelebrini.qualrole.activity.MainActivity;
 import com.android.guicelebrini.qualrole.activity.QuestionActivity;
 import com.android.guicelebrini.qualrole.adapter.AdapterRecyclerQuestions;
+import com.android.guicelebrini.qualrole.helper.Base64Custom;
 import com.android.guicelebrini.qualrole.helper.RecyclerItemClickListener;
 import com.android.guicelebrini.qualrole.model.Question;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -39,6 +47,7 @@ public class QuestionsFragment extends Fragment {
     private View view;
 
     private FirebaseFirestore db;
+    private FirebaseUser user;
 
     private RecyclerView recyclerQuestions;
     private AdapterRecyclerQuestions adapter;
@@ -63,6 +72,7 @@ public class QuestionsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_questions, container, false);
 
         db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         recyclerQuestions = view.findViewById(R.id.recycler_questions);
 
         configureRecyclerQuestions();
@@ -96,6 +106,7 @@ public class QuestionsFragment extends Fragment {
                         String title = snapshot.getString("title");
                         String description = snapshot.getString("description");
                         String user = snapshot.getString("user");
+                        String userEmail = snapshot.getString("userEmail");
                         String city = snapshot.getString("city");
                         double moneyAvailable = snapshot.getDouble("moneyAvailable");
 
@@ -103,6 +114,7 @@ public class QuestionsFragment extends Fragment {
                         question.setTitle(title);
                         question.setDescription(description);
                         question.setUser(user);
+                        question.setUserEmail(userEmail);
                         question.setCity(city);
                         question.setMoneyAvailable(moneyAvailable);
                         question.setFirestoreId(snapshot.getId());
@@ -131,7 +143,6 @@ public class QuestionsFragment extends Fragment {
 
         recyclerQuestions.setLayoutManager(layoutManager);
         recyclerQuestions.setHasFixedSize(true);
-        //recyclerQuestions.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayout.VERTICAL));
 
         recyclerQuestions.addOnItemTouchListener(new RecyclerItemClickListener(view.getContext(), recyclerQuestions, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -145,6 +156,13 @@ public class QuestionsFragment extends Fragment {
 
             @Override
             public void onLongItemClick(View view, int position) {
+                Question question = questionsList.get(position);
+                String userEmail = user.getEmail();
+                int deletePosition = position;
+
+                if (question.getUserEmail().equals(userEmail)){
+                    openDeleteDialog(question.getTitle(), question.getFirestoreId(), deletePosition);
+                }
 
             }
 
@@ -155,5 +173,41 @@ public class QuestionsFragment extends Fragment {
         }));
 
         recyclerQuestions.setAdapter(adapter);
+    }
+
+    private void openDeleteDialog(String questionTitle, String questionId, int deletePosition){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(view.getContext());
+
+        dialog.setTitle("Excluir pergunta");
+        dialog.setMessage("Você tem certeza que deseja excluir '" + questionTitle + "' ?");
+        dialog.setCancelable(false);
+
+
+        dialog.setPositiveButton("Excluir", (dialogInterface, i) -> {
+            deleteQuestion(questionId, deletePosition);
+        });
+
+        dialog.setNegativeButton("Cancelar", (dialogInterface, i) -> {
+
+        });
+
+        dialog.create().show();
+    }
+
+    private void deleteQuestion(String firestoreId, int deletePosition){
+        String userId = Base64Custom.encode(user.getEmail());
+
+        db.collection("questions").document(firestoreId).delete().addOnSuccessListener(unused -> {
+            db.collection("users").document(userId)
+                    .collection("questions").document(firestoreId).delete().addOnSuccessListener(unused1 -> {
+                        db.collection("users").document(userId)
+                                .update("questionsNumber", FieldValue.increment(-1)).addOnSuccessListener(unused2 -> {
+                                    questionsList.remove(deletePosition);
+                                    adapter.notifyDataSetChanged();
+                                    Toast.makeText(view.getContext(), "Pergunta removida com sucesso", Toast.LENGTH_SHORT).show();
+                                });
+                    });
+        });
+
     }
 }
