@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.guicelebrini.qualrole.R;
+import com.android.guicelebrini.qualrole.helper.Preferences;
 import com.android.guicelebrini.qualrole.model.Answer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,6 +29,8 @@ public class AddAnswerActivity extends AppCompatActivity {
     private FirebaseUser user;
     private String questionFirestoreId;
 
+    private Preferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,7 @@ public class AddAnswerActivity extends AppCompatActivity {
         getExtras();
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        preferences = new Preferences(getApplicationContext());
 
         buttonAdd.setOnClickListener(view -> {
             addAnswerInFirebase();
@@ -53,11 +57,13 @@ public class AddAnswerActivity extends AppCompatActivity {
     }
 
     private void addAnswerInFirebase(){
-        if (editDesc.equals("") || editDesc.equals(null)){
+        String description = editDesc.getText().toString();
+
+        if (description.equals("") || description.equals(null)){
             Toast.makeText(getApplicationContext(), "Por favor, insira valores válidos", Toast.LENGTH_SHORT).show();
         } else {
-            String description = editDesc.getText().toString();
-            String userName = user.getDisplayName();
+
+            String userName = user.getDisplayName() + " #" + preferences.getFollowCode();
 
             Answer answer = new Answer(description, userName);
             db.collection("questions").document(questionFirestoreId).collection("answers").add(answer)

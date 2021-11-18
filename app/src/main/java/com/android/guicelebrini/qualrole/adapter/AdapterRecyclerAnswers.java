@@ -52,7 +52,7 @@ public class AdapterRecyclerAnswers extends RecyclerView.Adapter<AdapterRecycler
 
         private void set(Answer answer){
             this.textDesc.setText(answer.getDescription());
-            this.textUser.setText("Por: " + answer.getUser());
+            this.textUser.setText(answer.getUser());
         }
     }
 }

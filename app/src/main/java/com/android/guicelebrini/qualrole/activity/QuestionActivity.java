@@ -178,7 +178,6 @@ public class QuestionActivity extends AppCompatActivity {
 
         recyclerAnswers.setLayoutManager(layoutManager);
         recyclerAnswers.setHasFixedSize(true);
-        recyclerAnswers.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayout.VERTICAL));
 
         recyclerAnswers.setAdapter(adapter);
     }
