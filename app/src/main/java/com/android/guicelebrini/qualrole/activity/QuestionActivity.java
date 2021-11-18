@@ -19,13 +19,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.guicelebrini.qualrole.R;
 import com.android.guicelebrini.qualrole.adapter.AdapterRecyclerAnswers;
 import com.android.guicelebrini.qualrole.helper.Base64Custom;
+import com.android.guicelebrini.qualrole.helper.RecyclerItemClickListener;
 import com.android.guicelebrini.qualrole.model.Answer;
 import com.android.guicelebrini.qualrole.model.Question;
 import com.android.guicelebrini.qualrole.model.User;
@@ -169,6 +172,7 @@ public class QuestionActivity extends AppCompatActivity {
 
                     for ( DocumentSnapshot snapshot : task.getResult()) {
                         Answer answer = snapshot.toObject(Answer.class);
+                        answer.setFirestoreId(snapshot.getId());
                         answersList.add(answer);
                     }
                     verifyList();
@@ -194,6 +198,23 @@ public class QuestionActivity extends AppCompatActivity {
 
         recyclerAnswers.setLayoutManager(layoutManager);
         recyclerAnswers.setHasFixedSize(true);
+
+        recyclerAnswers.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), recyclerAnswers, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        }));
 
         recyclerAnswers.setAdapter(adapter);
     }

@@ -64,8 +64,9 @@ public class AddAnswerActivity extends AppCompatActivity {
         } else {
 
             String userName = user.getDisplayName() + " " + preferences.getFollowCode();
+            String userEmail = user.getEmail();
 
-            Answer answer = new Answer(description, userName);
+            Answer answer = new Answer(description, userName, userEmail);
             db.collection("questions").document(questionFirestoreId).collection("answers").add(answer)
                     .addOnCompleteListener(task -> {
                        if (task.isSuccessful()){

@@ -1,16 +1,21 @@
 package com.android.guicelebrini.qualrole.model;
 
+import com.google.firebase.firestore.Exclude;
+
 public class Answer {
 
     private String description;
     private String user;
+    private String userEmail;
+    private String firestoreId;
 
     public Answer() {
     }
 
-    public Answer(String description, String user) {
+    public Answer(String description, String user, String userEmail) {
         this.description = description;
         this.user = user;
+        this.userEmail = userEmail;
     }
 
     public String getDescription() {
@@ -27,5 +32,22 @@ public class Answer {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    @Exclude
+    public String getFirestoreId() {
+        return firestoreId;
+    }
+
+    public void setFirestoreId(String firestoreId) {
+        this.firestoreId = firestoreId;
     }
 }
