@@ -20,9 +20,12 @@ import android.widget.TextView;
 
 import com.android.guicelebrini.qualrole.R;
 import com.android.guicelebrini.qualrole.adapter.AdapterRecyclerAnswers;
+import com.android.guicelebrini.qualrole.helper.Base64Custom;
 import com.android.guicelebrini.qualrole.model.Answer;
 import com.android.guicelebrini.qualrole.model.Question;
+import com.android.guicelebrini.qualrole.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -95,6 +98,9 @@ public class QuestionActivity extends AppCompatActivity {
                         firestoreQuestion.setMoneyAvailable(moneyAvailable);
                         firestoreQuestion.setFirestoreId(snapshot.getId());
 
+                        String userEmail = snapshot.getString("userEmail");
+                        getUserQuestionInFirebase(userEmail);
+
                         set(firestoreQuestion);
                     }
                 });
@@ -102,7 +108,6 @@ public class QuestionActivity extends AppCompatActivity {
 
     private void set(Question question) {
         textTitle.setText(question.getTitle());
-        textUser.setText(question.getUser());
         textDesc.setText(question.getDescription());
         textCity.setText(question.getCity());
 
@@ -112,6 +117,19 @@ public class QuestionActivity extends AppCompatActivity {
             this.textMoney.setText("----");
             this.textMoney.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_money_off_24, 0, 0, 0);
         }
+    }
+
+    private void getUserQuestionInFirebase(String userEmail){
+        String userId = Base64Custom.encode(userEmail);
+
+        db.collection("users").document(userId).get().addOnSuccessListener(documentSnapshot -> {
+            User firestoreUser = documentSnapshot.toObject(User.class);
+            set(firestoreUser);
+        });
+    }
+
+    private void set(User user){
+        textUser.setText(user.getName());
     }
 
     public void goToAddAnswerActivity(View view){
