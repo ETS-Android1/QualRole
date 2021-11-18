@@ -3,6 +3,7 @@ package com.android.guicelebrini.qualrole.activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -40,6 +41,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     private TextView textTitle, textUser, textDesc, textCity, textMoney, textNoAnswers;
     private ImageView imageUser;
+    private Toolbar toolbar;
 
     private String firestoreQuestionId;
 
@@ -54,6 +56,7 @@ public class QuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
         findViewsById();
+        configureToolbar();
         getExtras();
 
         db = FirebaseFirestore.getInstance();
@@ -75,7 +78,17 @@ public class QuestionActivity extends AppCompatActivity {
 
         imageUser = findViewById(R.id.iv_question_user);
 
+        toolbar = findViewById(R.id.toolbar_question);
+
         recyclerAnswers = findViewById(R.id.recycler_answers);
+    }
+
+    private void configureToolbar(){
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     private void getExtras(){

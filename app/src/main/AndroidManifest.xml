@@ -10,7 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QualRole">
         <activity android:name=".activity.AddAnswerActivity"></activity>
-        <activity android:name=".activity.QuestionActivity" />
+        <activity android:name=".activity.QuestionActivity"
+            android:exported="true"
+            android:parentActivityName=".activity.MainActivity"/>
         <activity android:name=".activity.AddQuestionActivity"
             android:exported="true"
             android:parentActivityName=".activity.MainActivity"/>
