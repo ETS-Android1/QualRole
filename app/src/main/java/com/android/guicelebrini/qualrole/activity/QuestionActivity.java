@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ import android.widget.Toast;
 import com.android.guicelebrini.qualrole.R;
 import com.android.guicelebrini.qualrole.adapter.AdapterRecyclerAnswers;
 import com.android.guicelebrini.qualrole.helper.Base64Custom;
+import com.android.guicelebrini.qualrole.helper.Preferences;
 import com.android.guicelebrini.qualrole.helper.RecyclerItemClickListener;
 import com.android.guicelebrini.qualrole.model.Answer;
 import com.android.guicelebrini.qualrole.model.Question;
@@ -49,6 +52,8 @@ import java.util.List;
 public class QuestionActivity extends AppCompatActivity {
 
     private TextView textTitle, textUser, textDesc, textCity, textMoney, textNoAnswers;
+    private EditText editAnswer;
+    private ImageButton buttonAddAnswer;
     private ImageView imageUser;
     private Toolbar toolbar;
 
@@ -61,6 +66,8 @@ public class QuestionActivity extends AppCompatActivity {
     private AdapterRecyclerAnswers adapter;
     private List<Answer> answersList = new ArrayList<>();
 
+    private Preferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,12 +78,17 @@ public class QuestionActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        preferences = new Preferences(getApplicationContext());
 
         getQuestionInFirebase();
 
         verifyList();
 
         configureRecyclerView();
+
+        buttonAddAnswer.setOnClickListener(view -> {
+            addAnswerInFirebase();
+        });
     }
 
     private void findViewsById(){
@@ -86,6 +98,10 @@ public class QuestionActivity extends AppCompatActivity {
         textCity = findViewById(R.id.tv_question_city);
         textMoney = findViewById(R.id.tv_question_money);
         textNoAnswers = findViewById(R.id.tv_question_no_answers);
+
+        editAnswer = findViewById(R.id.edit_question_answer);
+
+        buttonAddAnswer = findViewById(R.id.button_question_add_answer);
 
         imageUser = findViewById(R.id.iv_question_user);
 
@@ -280,6 +296,31 @@ public class QuestionActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void addAnswerInFirebase(){
+        String description = editAnswer.getText().toString();
+
+        if (description.equals("") || description.equals(null)){
+            Toast.makeText(getApplicationContext(), "Por favor, insira valores válidos", Toast.LENGTH_SHORT).show();
+        } else {
+
+            String userName = user.getDisplayName() + " " + preferences.getFollowCode();
+            String userEmail = user.getEmail();
+
+            Answer answer = new Answer(description, userName, userEmail);
+            db.collection("questions").document(firestoreQuestionId).collection("answers").add(answer)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            Toast.makeText(getApplicationContext(), "Resposta salva com sucesso", Toast.LENGTH_SHORT).show();
+                            createAnswersList();
+                            editAnswer.setText("");
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Erro ao salvar resposta", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+        }
     }
 
     @Override

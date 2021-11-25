@@ -165,7 +165,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/edit_question_answer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -186,7 +186,7 @@
             app:layout_constraintGuide_percent="0.8" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/button_question_add_answer"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
@@ -198,7 +198,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline12"
-            app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName"
+            app:layout_constraintTop_toTopOf="@+id/edit_question_answer"
             app:srcCompat="@drawable/ic_add_comment" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
