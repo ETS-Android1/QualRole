@@ -19,6 +19,7 @@
 
     <!-- Question activity -->
     <string name="textView_no_answers">Ninguém respondeu ainda... Seja o primeiro!</string>
+    <string name="editText_answer">Digite aqui sua resposta...</string>
 
     <!-- Add answer activity -->
     <string name="button_add_answer">Responder</string>
